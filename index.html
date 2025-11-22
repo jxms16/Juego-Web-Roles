@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guerra de Roles - Juego Estratégico</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Menú Principal -->
+    <div id="mainMenu" class="menu-container">
+        <div class="menu-content">
+            <h1 class="title">GUERRA DE ROLES</h1>
+            <div class="subtitle">Sistema de Combate Estratégico</div>
+            
+            <div class="menu-buttons">
+                <button class="btn-military" id="btnCreateRoom">Crear Partida</button>
+                <button class="btn-military" id="btnJoinRoom">Unirse a Partida</button>
+                <button class="btn-military" id="btnTutorial">Tutorial</button>
+                <button class="btn-military" id="btnSettings">Configuración</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú de Selección de Roles -->
+    <div id="roleSelection" class="menu-container hidden">
+        <div class="menu-content">
+            <h2 class="title">Selección de Rol</h2>
+            <div class="role-selection-info">
+                <p>Equipo: <span id="teamName">Equipo A</span></p>
+                <p>Roles Disponibles: 1 Tanque, 2 DPS, 2 Soporte</p>
+            </div>
+            
+            <div class="roles-container">
+                <div class="role-card" data-role="tank">
+                    <div class="role-icon">🛡️</div>
+                    <h3>TANQUE</h3>
+                    <div class="role-count" id="tankCount">0/1</div>
+                    <p class="role-description">Defensa cuerpo a cuerpo. Escudo protector. Ulti destructora.</p>
+                </div>
+                
+                <div class="role-card" data-role="dps">
+                    <div class="role-icon">⚔️</div>
+                    <h3>DPS</h3>
+                    <div class="role-count" id="dpsCount">0/2</div>
+                    <p class="role-description">Múltiples armas. Accesorios potenciadores. Daño devastador.</p>
+                </div>
+                
+                <div class="role-card" data-role="support">
+                    <div class="role-icon">✨</div>
+                    <h3>SOPORTE</h3>
+                    <div class="role-count" id="supportCount">0/2</div>
+                    <p class="role-description">Equipamiento mejorado. Curas periódicas. Buffs temporales.</p>
+                </div>
+            </div>
+            
+            <button class="btn-military btn-ready" id="btnReady" disabled>Listo para Combatir</button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Juego -->
+    <div id="gameContainer" class="game-container hidden">
+        <div class="game-ui">
+            <div class="player-info">
+                <div class="role-badge" id="playerRole"></div>
+                <div class="health-bar-container">
+                    <div class="health-bar-label">Vida</div>
+                    <div class="health-bar">
+                        <div class="health-bar-fill" id="playerHealth"></div>
+                    </div>
+                    <span id="healthText">100/100</span>
+                </div>
+                
+                <!-- Tanque UI -->
+                <div id="tankUI" class="role-ui hidden">
+                    <div class="ability-bar">
+                        <button class="ability-btn" id="btnShield">Escudo</button>
+                        <div class="ulti-container">
+                            <div class="ulti-bar">
+                                <div class="ulti-fill" id="tankUltiBar">0%</div>
+                            </div>
+                            <button class="ability-btn ulti-btn" id="btnBreakWalls" disabled>Romper Paredes</button>
+                        </div>
+                    </div>
+                    <div id="shieldHealth" class="shield-info hidden">Escudo: <span id="shieldHealthValue">0</span> HP</div>
+                </div>
+                
+                <!-- DPS UI -->
+                <div id="dpsUI" class="role-ui hidden">
+                    <div class="weapon-selector">
+                        <label>Arma:</label>
+                        <select id="weaponSelect">
+                            <option value="rifle">Rifle de Asalto</option>
+                            <option value="sniper">Francotirador</option>
+                            <option value="shotgun">Escopeta</option>
+                            <option value="smg">Subfusil</option>
+                        </select>
+                    </div>
+                    <div class="accessories-container">
+                        <label>Accesorios:</label>
+                        <div class="accessories-grid" id="accessoriesGrid"></div>
+                    </div>
+                </div>
+                
+                <!-- Soporte UI -->
+                <div id="supportUI" class="role-ui hidden">
+                    <div class="support-abilities">
+                        <button class="ability-btn" id="btnHealAll">Curar Equipo</button>
+                        <button class="ability-btn" id="btnBuffTank">Mejora Tanque</button>
+                        <button class="ability-btn" id="btnBuffDPS">Mejora DPS</button>
+                    </div>
+                    <div class="heal-timer">Próxima Cura: <span id="healTimer">10</span>s</div>
+                </div>
+            </div>
+            
+            <div class="game-stats">
+                <div class="team-stats">
+                    <div class="team-a">
+                        <h3>Equipo A</h3>
+                        <div id="teamAStats"></div>
+                    </div>
+                    <div class="vs-indicator">VS</div>
+                    <div class="team-b">
+                        <h3>Equipo B</h3>
+                        <div id="teamBStats"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="controls-info">
+            <p>WASD: Movimiento | Click Izquierdo: Atacar/Usar Habilidad | R: Habilidad Especial</p>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

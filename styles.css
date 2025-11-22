@@ -1,0 +1,490 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #e8e8e8;
+    overflow: hidden;
+}
+
+/* Menú Principal */
+.menu-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a1a 100%);
+    position: relative;
+}
+
+.menu-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100, 150, 200, 0.03) 2px, rgba(100, 150, 200, 0.03) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(100, 150, 200, 0.03) 2px, rgba(100, 150, 200, 0.03) 4px);
+    pointer-events: none;
+}
+
+.menu-content {
+    text-align: center;
+    z-index: 1;
+    background: rgba(10, 10, 26, 0.8);
+    padding: 40px 60px;
+    border: 2px solid #4a9eff;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(74, 158, 255, 0.3),
+                inset 0 0 30px rgba(74, 158, 255, 0.1);
+}
+
+.title {
+    font-size: 3.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    color: #4a9eff;
+    text-shadow: 
+        0 0 10px #4a9eff,
+        0 0 20px #4a9eff,
+        0 0 30px #4a9eff,
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 10px;
+    font-family: 'Courier New', monospace;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #a0c8ff;
+    margin-bottom: 40px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-military {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2a4a7f 100%);
+    border: 2px solid #4a9eff;
+    color: #e8e8e8;
+    padding: 15px 40px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(74, 158, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-military::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(74, 158, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-military:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-military:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 158, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: #6bb3ff;
+    color: #ffffff;
+}
+
+.btn-military:active {
+    transform: translateY(0);
+}
+
+.btn-ready {
+    margin-top: 30px;
+    background: linear-gradient(135deg, #2d5a3d 0%, #3d7a5d 100%);
+    border-color: #4aff7f;
+}
+
+.btn-ready:hover {
+    border-color: #6bff9f;
+    box-shadow: 0 6px 20px rgba(74, 255, 127, 0.4);
+}
+
+.btn-ready:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Selección de Roles */
+.role-selection-info {
+    margin-bottom: 30px;
+    color: #a0c8ff;
+    font-size: 1.1em;
+}
+
+.roles-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.role-card {
+    background: rgba(30, 58, 95, 0.6);
+    border: 2px solid #4a9eff;
+    border-radius: 10px;
+    padding: 25px;
+    width: 250px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.role-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(74, 158, 255, 0.4);
+    border-color: #6bb3ff;
+}
+
+.role-card.selected {
+    border-color: #4aff7f;
+    background: rgba(45, 90, 61, 0.6);
+    box-shadow: 0 0 20px rgba(74, 255, 127, 0.3);
+}
+
+.role-card.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.role-icon {
+    font-size: 4em;
+    margin-bottom: 10px;
+}
+
+.role-card h3 {
+    font-size: 1.5em;
+    color: #4a9eff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.role-count {
+    display: inline-block;
+    background: rgba(74, 158, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.role-description {
+    font-size: 0.9em;
+    color: #c0d8ff;
+    line-height: 1.6;
+}
+
+/* Juego */
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: #0a0a1a;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #1a1a2e;
+}
+
+.game-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 20px;
+    pointer-events: none;
+}
+
+.player-info {
+    background: rgba(10, 10, 26, 0.85);
+    border: 2px solid #4a9eff;
+    border-radius: 10px;
+    padding: 15px;
+    max-width: 400px;
+    pointer-events: auto;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    background: rgba(74, 158, 255, 0.3);
+    border: 1px solid #4a9eff;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.health-bar-container {
+    margin-top: 10px;
+}
+
+.health-bar-label {
+    font-size: 0.9em;
+    color: #a0c8ff;
+    margin-bottom: 5px;
+}
+
+.health-bar {
+    width: 100%;
+    height: 25px;
+    background: rgba(255, 0, 0, 0.2);
+    border: 2px solid #ff0000;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.health-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff00 0%, #80ff00 100%);
+    transition: width 0.3s ease;
+    width: 100%;
+}
+
+.role-ui {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(74, 158, 255, 0.3);
+}
+
+.ability-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ability-btn {
+    background: rgba(74, 158, 255, 0.2);
+    border: 1px solid #4a9eff;
+    color: #e8e8e8;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    font-size: 0.9em;
+    pointer-events: auto;
+}
+
+.ability-btn:hover:not(:disabled) {
+    background: rgba(74, 158, 255, 0.4);
+    border-color: #6bb3ff;
+}
+
+.ability-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ulti-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+.ulti-bar {
+    width: 100%;
+    height: 20px;
+    background: rgba(255, 200, 0, 0.2);
+    border: 1px solid #ffc800;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.ulti-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffc800 0%, #ff9800 100%);
+    transition: width 0.3s ease;
+    width: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.ulti-btn {
+    background: rgba(255, 200, 0, 0.2);
+    border-color: #ffc800;
+}
+
+.shield-info {
+    margin-top: 10px;
+    padding: 8px;
+    background: rgba(74, 158, 255, 0.1);
+    border: 1px solid #4a9eff;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.weapon-selector, .accessories-container {
+    margin-bottom: 10px;
+}
+
+.weapon-selector label, .accessories-container label {
+    display: block;
+    margin-bottom: 5px;
+    color: #a0c8ff;
+    font-size: 0.9em;
+}
+
+#weaponSelect {
+    width: 100%;
+    padding: 8px;
+    background: rgba(30, 58, 95, 0.6);
+    border: 1px solid #4a9eff;
+    color: #e8e8e8;
+    border-radius: 5px;
+    pointer-events: auto;
+}
+
+.accessories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.accessory-item {
+    padding: 5px;
+    background: rgba(74, 158, 255, 0.1);
+    border: 1px solid #4a9eff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.8em;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+}
+
+.accessory-item:hover {
+    background: rgba(74, 158, 255, 0.3);
+}
+
+.accessory-item.active {
+    border-color: #4aff7f;
+    background: rgba(74, 255, 127, 0.2);
+}
+
+.support-abilities {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.heal-timer {
+    margin-top: 10px;
+    padding: 8px;
+    background: rgba(74, 255, 127, 0.1);
+    border: 1px solid #4aff7f;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.game-stats {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(10, 10, 26, 0.85);
+    border: 2px solid #4a9eff;
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 250px;
+    pointer-events: auto;
+}
+
+.team-stats {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.team-a, .team-b {
+    flex: 1;
+}
+
+.team-a h3, .team-b h3 {
+    color: #4a9eff;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 1em;
+}
+
+.vs-indicator {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ff6b6b;
+    padding: 0 10px;
+}
+
+.controls-info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 10, 26, 0.85);
+    border: 2px solid #4a9eff;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    color: #a0c8ff;
+    pointer-events: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Efectos de partículas y glows */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.role-card.selected .role-icon {
+    animation: pulse 2s infinite;
+}
