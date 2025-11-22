@@ -11,6 +11,8 @@ class Game {
         this.selectedRole = null;
         this.gameRunning = false;
         this.lastTime = 0;
+        this.showUltiHitbox = false;
+        this.ultiHitboxAnimation = null; // {x, y, radius, time, duration}
         
         this.init();
     }
@@ -258,6 +260,17 @@ class Game {
         
         // Destruir todas las paredes en un área
         const breakRadius = 200;
+        
+        // Iniciar animación de hitbox
+        this.ultiHitboxAnimation = {
+            x: this.player.x,
+            y: this.player.y,
+            radius: 0,
+            maxRadius: breakRadius,
+            time: 0,
+            duration: 0.5 // 0.5 segundos de animación
+        };
+        
         this.walls = this.walls.filter(wall => {
             const dist = Math.sqrt(
                 Math.pow(wall.x - this.player.x, 2) + 
@@ -270,6 +283,7 @@ class Game {
         document.getElementById('btnBreakWalls').disabled = true;
         document.getElementById('tankUltiBar').textContent = '0%';
         document.getElementById('tankUltiBar').style.width = '0%';
+        this.showUltiHitbox = false;
     }
 
     healAll() {
@@ -497,6 +511,25 @@ class Game {
             }
         });
         
+        // Actualizar animación de hitbox de ultimate
+        if (this.ultiHitboxAnimation) {
+            this.ultiHitboxAnimation.time += deltaTime;
+            const progress = Math.min(this.ultiHitboxAnimation.time / this.ultiHitboxAnimation.duration, 1);
+            // Animación de expansión con efecto de rebote
+            this.ultiHitboxAnimation.radius = this.ultiHitboxAnimation.maxRadius * (1 - Math.pow(1 - progress, 3));
+            
+            if (progress >= 1) {
+                this.ultiHitboxAnimation = null;
+            }
+        }
+        
+        // Mostrar hitbox cuando la ultimate está lista
+        if (this.player && this.player.role === 'tank' && this.player.ultiCharge >= 100) {
+            this.showUltiHitbox = true;
+        } else {
+            this.showUltiHitbox = false;
+        }
+        
         // Actualizar UI
         this.updateUI();
         
@@ -586,6 +619,16 @@ class Game {
             shield.render(this.ctx);
         });
         
+        // Dibujar hitbox de ultimate del tanque (cuando está lista)
+        if (this.showUltiHitbox && this.player && this.player.role === 'tank') {
+            this.drawUltiHitbox(this.player.x, this.player.y, 200);
+        }
+        
+        // Dibujar animación de hitbox de ultimate (cuando se activa)
+        if (this.ultiHitboxAnimation) {
+            this.drawUltiHitboxAnimation(this.ultiHitboxAnimation);
+        }
+        
         // Dibujar jugadores
         this.players.forEach(player => {
             player.render(this.ctx);
@@ -657,6 +700,90 @@ class Game {
             );
             this.ctx.fill();
         });
+    }
+
+    drawUltiHitbox(x, y, radius) {
+        // Dibujar círculo de área de efecto cuando la ultimate está lista
+        this.ctx.save();
+        
+        // Círculo exterior con borde pulsante
+        const pulse = Math.sin(Date.now() / 200) * 0.2 + 0.8;
+        this.ctx.strokeStyle = `rgba(255, 200, 0, ${0.3 * pulse})`;
+        this.ctx.lineWidth = 3;
+        this.ctx.setLineDash([10, 5]);
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, radius, 0, Math.PI * 2);
+        this.ctx.stroke();
+        
+        // Círculo interior más opaco
+        this.ctx.strokeStyle = 'rgba(255, 200, 0, 0.5)';
+        this.ctx.lineWidth = 2;
+        this.ctx.setLineDash([]);
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, radius * 0.95, 0, Math.PI * 2);
+        this.ctx.stroke();
+        
+        // Relleno semi-transparente
+        this.ctx.fillStyle = 'rgba(255, 200, 0, 0.1)';
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, radius, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        // Texto indicador
+        this.ctx.fillStyle = '#ffc800';
+        this.ctx.font = 'bold 16px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText('ULTIMATE LISTA', x, y);
+        
+        this.ctx.restore();
+    }
+
+    drawUltiHitboxAnimation(animation) {
+        // Dibujar animación de expansión cuando se activa la ultimate
+        this.ctx.save();
+        
+        const progress = animation.time / animation.duration;
+        const alpha = 1 - progress; // Se desvanece mientras se expande
+        
+        // Círculo exterior con efecto de onda
+        this.ctx.strokeStyle = `rgba(255, 100, 0, ${alpha * 0.8})`;
+        this.ctx.lineWidth = 5;
+        this.ctx.beginPath();
+        this.ctx.arc(animation.x, animation.y, animation.radius, 0, Math.PI * 2);
+        this.ctx.stroke();
+        
+        // Círculo interior más brillante
+        this.ctx.strokeStyle = `rgba(255, 200, 0, ${alpha})`;
+        this.ctx.lineWidth = 3;
+        this.ctx.beginPath();
+        this.ctx.arc(animation.x, animation.y, animation.radius * 0.8, 0, Math.PI * 2);
+        this.ctx.stroke();
+        
+        // Relleno pulsante
+        this.ctx.fillStyle = `rgba(255, 150, 0, ${alpha * 0.2})`;
+        this.ctx.beginPath();
+        this.ctx.arc(animation.x, animation.y, animation.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        // Efecto de partículas/rayos
+        const rayCount = 8;
+        for (let i = 0; i < rayCount; i++) {
+            const angle = (Math.PI * 2 / rayCount) * i;
+            const startX = animation.x + Math.cos(angle) * (animation.radius * 0.7);
+            const startY = animation.y + Math.sin(angle) * (animation.radius * 0.7);
+            const endX = animation.x + Math.cos(angle) * animation.radius;
+            const endY = animation.y + Math.sin(angle) * animation.radius;
+            
+            this.ctx.strokeStyle = `rgba(255, 200, 0, ${alpha * 0.6})`;
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.moveTo(startX, startY);
+            this.ctx.lineTo(endX, endY);
+            this.ctx.stroke();
+        }
+        
+        this.ctx.restore();
     }
 }
 
