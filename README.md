@@ -52,12 +52,54 @@ Un juego web multijugador 5v5 con roles específicos, estilo militar-fantasía y
 - **Click Izquierdo**: Atacar / Usar habilidad
 - **Botones de Habilidad**: Dependiendo del rol, usar habilidades especiales
 
-## Instalación y Uso
+## Instalación y Uso Local
 
-1. Abre `index.html` en un navegador web moderno
-2. Crea una partida o únete a una existente
-3. Selecciona tu rol
-4. ¡Comienza a jugar!
+1. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+
+2. Inicia el servidor:
+   ```bash
+   npm start
+   ```
+
+3. Abre `http://localhost:3000` en tu navegador
+4. Crea una partida o únete a una existente
+5. Selecciona tu rol
+6. ¡Comienza a jugar!
+
+## Despliegue en Railway
+
+Este proyecto está configurado para desplegarse fácilmente en Railway:
+
+1. **Conecta tu repositorio a Railway:**
+   - Ve a [Railway](https://railway.app)
+   - Crea una nueva cuenta o inicia sesión
+   - Haz clic en "New Project"
+   - Selecciona "Deploy from GitHub repo"
+   - Conecta tu repositorio
+
+2. **Railway detectará automáticamente:**
+   - El archivo `package.json` (indica que es un proyecto Node.js)
+   - El comando de inicio: `npm start`
+   - El puerto: Railway asignará automáticamente el puerto a través de la variable de entorno `PORT`
+
+3. **Despliegue automático:**
+   - Railway construirá e instalará las dependencias automáticamente
+   - El servidor se iniciará usando `npm start`
+   - Tu aplicación estará disponible en una URL proporcionada por Railway
+
+### Archivos necesarios para Railway:
+- ✅ `package.json` - Define las dependencias y scripts
+- ✅ `server.js` - Servidor Express para servir los archivos estáticos
+- ✅ `railway.json` - Configuración opcional para Railway
+- ✅ `.gitignore` - Excluye node_modules del repositorio
+
+### Notas importantes:
+- Railway usa la variable de entorno `PORT` automáticamente
+- El servidor está configurado para usar `process.env.PORT || 3000`
+- No necesitas configurar nada adicional, Railway lo detecta todo automáticamente
 
 ## Características Técnicas
 
